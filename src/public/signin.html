@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+<link rel="stylesheet" href="./styles/styles.css">
+<script src="https://unpkg.com/@simplewebauthn/browser/dist/bundle/index.umd.min.js"></script>
+<script src ="js/javascripts.js"></script>
+</head>
+<body onload="getUserInfo()">
+<div class="container">
+  <h1>Login with Biometric Authentication</h1>
+  <label for="loginname">Registered Email:</label><br>
+  <input type="text" id="loginname" placeholder="Email"><br>
+  <button type="submit" id="authenticate" onclick="authenticate()">Authenticate</button>
+  <button type="submit" id="logout" class="logout-button" onclick="logout()">Logout</button>
+  <p>Dont have an account?</p>
+  <p><a href="./index.html">Signup</a></p>
+  <p id="success"></p>
+  <p id="error"></p>
+</div>
+</body>
+</html>

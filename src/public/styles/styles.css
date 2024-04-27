@@ -1,0 +1,89 @@
+/* styles.css */
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .container {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 50px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    transform: translateY(50%);
+    position: relative;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }
+  
+  h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  
+  label {
+    margin-bottom: 4px;
+    display: block;
+    color: #333;
+  }
+  
+  input[type="text"] {
+    width: calc(100% - 24px);
+    padding: 12px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #555;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 1px;
+  }
+  
+  .logout-button {
+    margin-top: 1px; 
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #666;
+  }
+  
+  a {
+    color: #0077cc;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 16px;
+    text-align: center;
+    width: 100%;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  p {
+    text-align: center;
+    color: #333;
+  }
+  
+  #success {
+    color: green;
+  }
+  
+  #error {
+    color: red;
+  }
+  
