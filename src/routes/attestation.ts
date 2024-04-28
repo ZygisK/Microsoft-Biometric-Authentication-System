@@ -20,9 +20,8 @@ const origin = config.origin;
 router.post('/result', async (req: Request, res: Response) => {
   
   const body: RegistrationResponseJSON = req.body;
-  //
   console.log('Received body at /result', body);
-  //
+
   if (!req.session.currentChallenge) {
     res.json({
       status: 'failed',
@@ -38,81 +37,75 @@ router.post('/result', async (req: Request, res: Response) => {
     });
   }
 
-  //
   const expectedChallenge = req.session.currentChallenge;
   const username = req.session.username;
  
   const opts: VerifyRegistrationResponseOpts = {
-     response: body,
-     expectedChallenge: `${expectedChallenge}`,
-     expectedOrigin: origin,
-     expectedRPID: rpID,
-     requireUserVerification: false,
+    response: body,
+    expectedChallenge: `${expectedChallenge}`,
+    expectedOrigin: origin,
+    expectedRPID: rpID,
+    requireUserVerification: false,
   };
  
   let verification;
   try {
-     verification = await verifyRegistrationResponse(opts);
-     //
-     console.log('Verification result', verification);
-     //
+    verification = await verifyRegistrationResponse(opts);
+    console.log('Verification result', verification);
   } catch (error) {
-     res.json({
-       status: 'failed',
-       errorMessage: (error as Error).message,
-     });
-     return;
+    return res.json({
+      status: 'failed',
+      errorMessage: (error as Error).message,
+    });
   }
  
   const { verified, registrationInfo } = verification;
   if (!verified || !registrationInfo) {
-     res.json({
-       status: 'failed',
-       errorMessage: 'Cannot validate response signature.',
-     });
-     return;
+    return res.json({
+      status: 'failed',
+      errorMessage: 'Cannot validate response signature.',
+    });
   }
- 
-  const { credentialPublicKey, credentialID, counter } = registrationInfo;
- 
-  console.log('Looking for user with username aka (email)):', username);
-  //const user = await User.findOne({ username: username });
-  const user = await User.findOne({ username: req.session.username }).exec();
 
-  console.log('Query sent to database: ', User.findOne({ username: req.session.username }).getQuery());
-  console.log('User found:', user);
-  
-  // Check if user is null before proceeding
+  // Convert Uint8Array to Buffer
+  const credentialIDBuffer = Buffer.from(registrationInfo.credentialID);
+  const credentialPublicKeyBuffer = Buffer.from(registrationInfo.credentialPublicKey);
+
+  let user = await User.findOne({ username: username }).exec();
+
   if (!user) {
-     res.json({
-       status: 'failed',
-       errorMessage: 'User not found.',
-     });
-     return;
+    // Create a new user if not found
+    user = new User({
+      username: username,
+      id: crypto.randomBytes(16).toString('hex'), // Generate a unique user ID however you prefer
+      authenticators: [] // start with an empty array of authenticators
+    });
   }
- 
+
   const existingAuthenticator = user.authenticators.find(authenticator =>
-     isoUint8Array.areEqual(authenticator.credentialID, credentialID)
+    authenticator.credentialID.equals(credentialIDBuffer) // Use Buffer.equals() to compare
   );
- 
+
   if (!existingAuthenticator) {
-     const newDevice: AuthenticatorDevice = {
-       credentialID,
-       credentialPublicKey,
-       counter,
-       transports: body.response.transports,
-     };
-     user.authenticators.push(newDevice);
-     await user.save();
+    // If authenticator does not exist, add it to the user's authenticators
+    const newAuthenticator: AuthenticatorDevice = {
+      credentialID: credentialIDBuffer,
+      credentialPublicKey: credentialPublicKeyBuffer,
+      counter: registrationInfo.counter,
+      transports: body.response.transports,
+    };
+    user.authenticators.push(newAuthenticator);
   }
- 
+
+  // Save the user (new or updated)
+  await user.save();
+
   req.session.currentChallenge = undefined;
-  const result = {
-     status: 'ok',
-     errorMessage: '',
-  };
-  res.json(result);
- });
+  res.json({
+    status: 'ok',
+    errorMessage: '',
+  });
+});
 
  ///////////////////////////////////////////////////////////////////////////
  router.post('/options', async (req: Request, res: Response) => {
