@@ -1,169 +1,159 @@
 import express, { Request, Response } from 'express';
 import {
-  generateAuthenticationOptions,
-  verifyAuthenticationResponse,
+  VerifyRegistrationResponseOpts,
+  generateRegistrationOptions,
+  verifyRegistrationResponse
 } from '@simplewebauthn/server';
-import type {
-  GenerateAuthenticationOptionsOpts,
-  VerifiedAuthenticationResponse,
-  VerifyAuthenticationResponseOpts,
-} from '@simplewebauthn/server';
-//import database from './db';
+import { AuthenticatorDevice, RegistrationResponseJSON } from '@simplewebauthn/typescript-types';
+import { isoUint8Array } from '@simplewebauthn/server/helpers';
+import crypto from 'crypto';
 import config from './config';
-import { AuthenticationResponseJSON } from '@simplewebauthn/server/script/deps';
-import { isoBase64URL, isoUint8Array } from '@simplewebauthn/server/helpers';
+//import database from './db';
 import {User} from '../models/userSchema';
 
 const router = express.Router();
 
+const rpName = config.rpName;
 const rpID = config.rpID;
 const origin = config.origin;
 
-router.post('/options', async (req: Request, res: Response) => {
-  //const user = database[req.body.username];
-  const user = await User.findOne({ username: req.body.username });
-  if (!user || !Array.isArray(user.authenticators)) {
+router.post('/result', async (req: Request, res: Response) => {
+  
+  const body: RegistrationResponseJSON = req.body;
+  //
+  console.log('Received body at /result', body);
+  //
+  if (!req.session.currentChallenge) {
     res.json({
       status: 'failed',
-      errorMessage: `User ${req.body.username} does not exist`,
+      errorMessage: 'No challenge found in session.',
     });
     return;
   }
-  const opts: GenerateAuthenticationOptionsOpts = {
-  timeout: 60000,
-  allowCredentials: user.authenticators.map(authenticator => ({
-    id: new Uint8Array(authenticator.credentialID),
-    type: 'public-key',
-    transports: authenticator.transports.map(transport => {
-       // Assuming 'transport' is a string that needs to be mapped to a valid AuthenticatorTransportFuture value
-       // This is just an example; you'll need to adjust the mapping based on the actual values
-       switch (transport) {
-         case 'usb':
-           return 'usb';
-         case 'ble':
-           return 'ble';
-         case 'nfc':
-           return 'nfc';
-         default:
-           throw new Error(`Unsupported transport type: ${transport}`);
-       }
-    }),
-   })),
-  userVerification: 'discouraged',
-  rpID,
-};
-  const credentialGetOptions = await generateAuthenticationOptions(opts);
-  const successRes = {
-    status: 'ok',
-    errorMessage: '',
-  };
-  const options = Object.assign(successRes, credentialGetOptions);
 
-
-  //
-  console.log('Generated authentication options', options);
-  //
-
-  req.session.username = user.username;
-  req.session.currentChallenge = options.challenge;
-  res.json(options)
-});
-
-router.post('/result', async (req: Request, res: Response) => {
-
-  //const body: AuthenticationResponseJSON = req.body;
-  const username = req.session.username;
-  const user = await User.findOne({ username: username });
-
-  //if (!body || !body.rawId) {
-    if(!user){
-    return res.status(400).json({
-      status: 'failed',
-      errorMessage: 'User is not authenticated / registered.',
-    });
-  }
-
-  const expectedChallenge = req.session.currentChallenge;
-  const body: AuthenticationResponseJSON = req.body;
-  //const username = `${req.session.username}`;
-  //const user = database[username];
-
-  let dbAuthenticator;
-  //const bodyCredIDBuffer = isoBase64URL.toBuffer(body.rawId)
-  const bodyCredIDBuffer = isoBase64URL.toBuffer(req.body.rawId);
-  for (const authenticator of user.authenticators) {
-    if (isoUint8Array.areEqual(authenticator.credentialID, bodyCredIDBuffer)) {
-      dbAuthenticator = authenticator;
-      break;
-    }
- }
-
-  if (!dbAuthenticator) {
+  if (!req.session.username) {
     return res.json({
       status: 'failed',
-      errorMessage: 'Authenticator is not registered with this site.',
+      errorMessage: 'Session username is undefined.'
     });
   }
 
-  enum AuthenticatorTransportFuture {
-    USB = 'usb',
-    BLE = 'ble',
-    NFC = 'nfc',
-   }
-
-
-   if (dbAuthenticator) {
-    dbAuthenticator = {
-       ...dbAuthenticator,
-       transports: dbAuthenticator.transports.map(transport => {
-         switch (transport) {
-           case 'usb':
-             return AuthenticatorTransportFuture.USB;
-           case 'ble':
-             return AuthenticatorTransportFuture.BLE;
-           case 'nfc':
-             return AuthenticatorTransportFuture.NFC;
-           default:
-             throw new Error(`Unsupported transport type: ${transport}`);
-         }
-       }),
-    };
-   }
-
-let verification: VerifiedAuthenticationResponse;
-try {
-   const opts: VerifyAuthenticationResponseOpts = {
+  //
+  const expectedChallenge = req.session.currentChallenge;
+  const username = req.session.username;
+ 
+  const opts: VerifyRegistrationResponseOpts = {
      response: body,
      expectedChallenge: `${expectedChallenge}`,
      expectedOrigin: origin,
      expectedRPID: rpID,
-     authenticator: dbAuthenticator,
-     requireUserVerification: false
-   };
-   verification = await verifyAuthenticationResponse(opts);
-} catch (error) {
-   return res.json({
-     status: 'failed',
-     errorMessage: (error as Error).message,
-   });
-}
+     requireUserVerification: false,
+  };
+ 
+  let verification;
+  try {
+     verification = await verifyRegistrationResponse(opts);
+     //
+     console.log('Verification result', verification);
+     //
+  } catch (error) {
+     res.json({
+       status: 'failed',
+       errorMessage: (error as Error).message,
+     });
+     return;
+  }
+ 
+  const { verified, registrationInfo } = verification;
+  if (!verified || !registrationInfo) {
+     res.json({
+       status: 'failed',
+       errorMessage: 'Cannot validate response signature.',
+     });
+     return;
+  }
+ 
+  const { credentialPublicKey, credentialID, counter } = registrationInfo;
+ 
+  console.log('Looking for user with username aka (email)):', username);
+  //const user = await User.findOne({ username: username });
+  const user = await User.findOne({ username: req.session.username }).exec();
 
-const { verified, authenticationInfo } = verification;
-if (!verified || !authenticationInfo) {
-   return res.json({
-     status: 'failed',
-     errorMessage: 'Cannot authenticate signature.',
-   });
-}
+  console.log('Query sent to database: ', User.findOne({ username: req.session.username }).getQuery());
+  console.log('User found:', user);
+  
+  // Check if user is null before proceeding
+  if (!user) {
+     res.json({
+       status: 'failed',
+       errorMessage: 'User not found.',
+     });
+     return;
+  }
+ 
+  const existingAuthenticator = user.authenticators.find(authenticator =>
+     isoUint8Array.areEqual(authenticator.credentialID, credentialID)
+  );
+ 
+  if (!existingAuthenticator) {
+     const newDevice: AuthenticatorDevice = {
+       credentialID,
+       credentialPublicKey,
+       counter,
+       transports: body.response.transports,
+     };
+     user.authenticators.push(newDevice);
+     await user.save();
+  }
+ 
+  req.session.currentChallenge = undefined;
+  const result = {
+     status: 'ok',
+     errorMessage: '',
+  };
+  res.json(result);
+ });
 
-dbAuthenticator.counter = authenticationInfo.newCounter;
-req.session.currentChallenge = undefined;
-req.session.isLoggedIn = true;
-const result = {
-   status: 'ok',
-   errorMessage: '',
-};
-res.json(result);
-});
+ ///////////////////////////////////////////////////////////////////////////
+ router.post('/options', async (req: Request, res: Response) => {
+  const username = req.body.username;
+
+  //store to session
+  req.session.username = username;
+
+  //encode the username to include @ and . in the username
+  const userIdBuffer = new TextEncoder().encode(username);
+
+  const userIdString = Buffer.from(userIdBuffer).toString('base64');
+ 
+  const options = await generateRegistrationOptions({
+     rpName: rpName, // Include rpName here
+     rpID: rpID, // Make sure to use rpID as required by the function
+     userID: userIdString,
+     userName: username,
+     timeout: 60000,
+     attestationType: 'direct',
+     excludeCredentials: [], // You might want to fill this with previously registered credentials
+     authenticatorSelection: {
+       userVerification: 'preferred',
+       requireResidentKey: false,
+     },
+  });
+
+  console.log('Generated registration options', options);
+ 
+  req.session.currentChallenge = options.challenge;
+ 
+  res.json(options);
+ });
+ //////////////////////////////////////////////////////////////////////////
+
+ 
+
+ 
+
+ 
+ 
+ 
 
 export default router;

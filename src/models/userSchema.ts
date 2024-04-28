@@ -14,6 +14,6 @@ const userSchema = new mongoose.Schema({
   authenticators: [authenticatorDeviceSchema],
 });
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('users', userSchema);
 
 export {User, authenticatorDeviceSchema};

@@ -15,6 +15,7 @@ import { isoBase64URL, isoUint8Array } from '@simplewebauthn/server/helpers';
 import {User} from '../models/userSchema';
 
 const router = express.Router();
+//test
 
 const rpID = config.rpID;
 const origin = config.origin;
@@ -58,6 +59,12 @@ router.post('/options', async (req: Request, res: Response) => {
     errorMessage: '',
   };
   const options = Object.assign(successRes, credentialGetOptions);
+
+
+  //
+  console.log('Generated authentication options', options);
+  //
+
   req.session.username = user.username;
   req.session.currentChallenge = options.challenge;
   res.json(options)
