@@ -8,6 +8,8 @@ import expressSession from 'express-session';
 import crypto from 'crypto';
 import mongoose from 'mongoose';
 
+//import users from './routes/users';
+
 const app: express.Express = express()
 
 declare module 'express-session' {
@@ -18,7 +20,7 @@ declare module 'express-session' {
   }
 }
 
-//Connect to MongoDB
+//connect to MongoDB
 mongoose.connect('mongodb+srv://deafhole:microsoft@cluster0.7ssubtn.mongodb.net/zygi?retryWrites=true&w=majority&appName=Cluster0').then(
     () => {console.log('Connected to MongoDB')},
     err => {console.log('Error connecting to MongoDB')}
@@ -44,6 +46,8 @@ const port = 3000;
 app.use('/', defaultrouttes);
 app.use('/attestation', attestation);
 app.use('/assertion', assertion);
+
+//app.use('/users', users);
 
 app.listen(port, () => {
   console.log(`listen port: ${port}`);

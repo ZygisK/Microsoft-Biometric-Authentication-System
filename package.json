@@ -1,6 +1,5 @@
 {
-  "name": "simplewebauthn-example",
-  "version": "1.0.0",
+  "name": "microsoft-biometric-hospital",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -10,14 +9,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kg0r0/simplewebauthn-example.git"
+    "url": "git+https://github.com/ZygisK/microsoft-biometric-hospital.git"
   },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/kg0r0/simplewebauthn-example/issues"
-  },
-  "homepage": "https://github.com/kg0r0/simplewebauthn-example#readme",
+
   "devDependencies": {
     "@types/cookie-parser": "^1.4.6",
     "@types/express": "^4.17.21",

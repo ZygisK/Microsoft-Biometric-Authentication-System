@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Signup</title>
-<link rel="stylesheet" href="./styles/styles.css">
-<script src="https://unpkg.com/@simplewebauthn/browser/dist/bundle/index.umd.min.js"></script>
-</head>
-<body>
-<div class="container">
-  <h1>Register for Biometric Authentication</h1>
-  <label for="username">Email for registration.</label><br>
-  <input type="text" id="username" placeholder="Email"><br>
-  <button type="submit" id="register" onclick="register()">Register</button>
-  <p><a href="./signin.html">Login</a></p>
-  <p id="success"></p>
-  <p id="error"></p>
-</div>
-</body>
-<script src ="js/javascripts.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Signup</title>
+    <link rel="stylesheet" href="./styles/styles.css" />
+    <script src="https://unpkg.com/@simplewebauthn/browser/dist/bundle/index.umd.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Register for Biometric Authentication</h1>
+      <label for="username">Email for registration.</label><br />
+      <input type="text" id="username" placeholder="Email" /><br />
+      <button type="submit" id="register" onclick="register()">Register</button>
+      <p><a href="./signin.html">Login</a></p>
+      <p id="success"></p>
+      <p id="error"></p>
+    </div>
+  </body>
+  <script src="js/javascripts.js"></script>
 </html>

@@ -1,5 +1,4 @@
 import express, { Request, Response } from 'express';
-//import database from './db';
 import {User} from '../models/userSchema';
 
 const router = express.Router();
