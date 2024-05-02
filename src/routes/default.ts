@@ -38,7 +38,8 @@ router.get('/logout', (req: Request, res: Response) => {
     if (err) {
       return res.json({
         status: 'failed',
-        errorMessage: err.message,
+        errorMessage: 'Error logging out.',
+        //errorMessage: err.message,
       });
     }
   });

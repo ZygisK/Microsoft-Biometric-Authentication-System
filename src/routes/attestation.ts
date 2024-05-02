@@ -55,7 +55,8 @@ router.post('/result', async (req: Request, res: Response) => {
   } catch (error) {
     return res.json({
       status: 'failed',
-      errorMessage: (error as Error).message,
+      errorMessage: 'Error verifying registration response.'
+      //errorMessage: (error as Error).message,
     });
   }
   

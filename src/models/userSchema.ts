@@ -6,6 +6,7 @@ const authenticatorDeviceSchema = new mongoose.Schema({
   credentialPublicKey: { type: Buffer, required: true }, 
   counter: { type: Number, required: true },
   transports: [{ type: String }],
+  //deviceType: { type: String, required: true },
 });
 
 //schema for users

@@ -22,6 +22,7 @@ router.post('/options', async (req: Request, res: Response) => {
   //const usertest = await User.findOne({ username: "ZygiTestExample@yahoo.com" });
   //console.log('User found:', usertest);
 
+
   //if the user does not exist or the user does not have any authenticators, return an error message.
   //authenticators is an array of authenticators that the user has registered, such as fingerprint, macbook fingerprint, etc.
   if (!user || !Array.isArray(user.authenticators)) {
@@ -64,6 +65,13 @@ router.post('/options', async (req: Request, res: Response) => {
 //POST request to /result, which verifies the authentication response
 router.post('/result', async (req: Request, res: Response) => {
 
+  if(req.session.isLoggedIn){
+    return res.json({
+      status: 'failed',
+      errorMessage: 'User is already logged in.',
+    });
+  }
+
   //const body: AuthenticationResponseJSON = req.body;
   const username = req.session.username;
   const user = await User.findOne({ username: username });
@@ -72,7 +80,7 @@ router.post('/result', async (req: Request, res: Response) => {
     if(!user){
     return res.status(400).json({
       status: 'failed',
-      errorMessage: 'User is not authenticated / registered.',
+      errorMessage: '',
     });
   }
 
@@ -80,6 +88,13 @@ router.post('/result', async (req: Request, res: Response) => {
   const body: AuthenticationResponseJSON = req.body;
   //const username = `${req.session.username}`;
   //const user = database[username];
+
+  if(!body.rawId){
+    return res.json({
+      status: 'failed',
+      errorMessage: 'Invalid credentials provided.',
+    });
+  }
 
 
   //dbAuthenticator will be the authenticator that the user has registered
@@ -96,7 +111,7 @@ router.post('/result', async (req: Request, res: Response) => {
   if (!dbAuthenticator) {
     return res.json({
       status: 'failed',
-      errorMessage: 'Authenticator is not registered with this site.',
+      errorMessage: 'Fingerprint not recognized. Please try again or register your fingerprint.',
     });
   }
 
@@ -162,7 +177,7 @@ if (!verified || !authenticationInfo) {
   console.log('Cannot authenticate signature.');
    return res.json({
      status: 'failed',
-     errorMessage: 'Cannot authenticate signature.',
+     errorMessage: 'Fingerprint not recognized. Please try again.',
    });
 }
 
