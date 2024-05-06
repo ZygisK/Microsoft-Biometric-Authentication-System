@@ -39,13 +39,14 @@ router.get('/logout', (req: Request, res: Response) => {
       return res.json({
         status: 'failed',
         errorMessage: 'Error logging out.',
-        //errorMessage: err.message,
       });
     }
-  });
-  res.json({
-    status: 'ok',
-    errorMessage: ''
+
+    // Redirect to the login page after successful logout
+    res.json({
+      status: 'ok',
+      redirect: '/signin.html'
+    });
   });
 });
 

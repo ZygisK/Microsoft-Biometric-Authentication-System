@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import expressSession from 'express-session';
 import crypto from 'crypto';
 import mongoose from 'mongoose';
+import cors from 'cors'; // Import CORS module
 
 //import users from './routes/users';
 
@@ -26,7 +27,8 @@ mongoose.connect('mongodb+srv://deafhole:microsoft@cluster0.7ssubtn.mongodb.net/
     err => {console.log('Error connecting to MongoDB')}
 );
 
-
+// Use CORS middleware
+app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -37,6 +39,14 @@ app.use(expressSession({
 }));
 app.use(cookieParser());
 app.use(express.static('./src/public/'));
+
+// Add the middleware function to set HTTP headers
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
+  next();
+});
 
 const port = 3000;
 
