@@ -7,8 +7,12 @@ import cookieParser from 'cookie-parser';
 import expressSession from 'express-session';
 import crypto from 'crypto';
 import mongoose from 'mongoose';
+import config from './routes/config'; // Import the configuration
 
 //import users from './routes/users';
+
+require('dotenv').config();
+const path = require('path');
 
 const app: express.Express = express()
 
@@ -21,10 +25,16 @@ declare module 'express-session' {
 }
 
 //connect to MongoDB
-mongoose.connect('mongodb+srv://deafhole:microsoft@cluster0.7ssubtn.mongodb.net/zygi?retryWrites=true&w=majority&appName=Cluster0').then(
-    () => {console.log('Connected to MongoDB')},
-    err => {console.log('Error connecting to MongoDB')}
+// mongoose.connect('mongodb+srv://deafhole:microsoft@cluster0.7ssubtn.mongodb.net/zygi?retryWrites=true&w=majority&appName=Cluster0').then(
+//     () => {console.log('Connected to MongoDB')},
+//     err => {console.log('Error connecting to MongoDB')}
+// );
+
+mongoose.connect(process.env.MONGO_DB_URI || 'mongodb+srv://deafhole:microsoft@cluster0.7ssubtn.mongodb.net/zygi?retryWrites=true&w=majority&appName=Cluster0').then(
+  () => console.log('Connected to MongoDB'),
+  err => console.log('Error connecting to MongoDB', err)
 );
+
 
 
 
@@ -36,9 +46,16 @@ app.use(expressSession({
   saveUninitialized: true
 }));
 app.use(cookieParser());
-app.use(express.static('./src/public/'));
+//app.use(express.static('./src/public/'));
 
-const port = 3000;
+//need to make a build folder
+app.use(express.static('./src/public/build'));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname,"src", 'public', 'index.html'));
+});
+
+//const port = 3000;
 
 /** 
  * routes
@@ -49,6 +66,6 @@ app.use('/assertion', assertion);
 
 //app.use('/users', users);
 
-app.listen(port, () => {
-  console.log(`listen port: ${port}`);
+app.listen(process.env.PORT, () => {
+  console.log(`listen port: ${process.env.PORT}`);
 });
