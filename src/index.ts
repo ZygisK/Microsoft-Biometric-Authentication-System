@@ -49,10 +49,11 @@ app.use(cookieParser());
 //app.use(express.static('./src/public/'));
 
 //need to make a build folder
-app.use(express.static(path.join(__dirname, 'src', 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'src', 'public', 'index.html'));
+  // Update the path below to point to the new location of index.html
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 //const port = 3000;
