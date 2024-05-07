@@ -40,8 +40,10 @@ app.use(expressSession({
   saveUninitialized: true
 }));
 app.use(cookieParser());
+
 app.use(express.static('./src/public/'));
 app.use(express.static('public'));
+
 
 // Add the middleware function to set HTTP headers
 app.use((req, res, next) => {
