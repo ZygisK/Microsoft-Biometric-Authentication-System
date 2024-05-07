@@ -52,7 +52,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('*', (req, res) => {
-  // Update the path below to point to the new location of index.html
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
