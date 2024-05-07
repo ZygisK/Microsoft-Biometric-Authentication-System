@@ -1,4 +1,0 @@
-{
-    "appService.defaultWebAppToDeploy": "/subscriptions/833a095c-6c36-40bb-a9d8-e3428eb9d887/resourceGroups/MS-Biometrics/providers/Microsoft.Web/sites/SecureBiomed",
-    "appService.deploySubpath": "biomed"
-}
