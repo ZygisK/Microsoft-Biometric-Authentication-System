@@ -52,8 +52,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  const filePath = path.join(__dirname, 'public', 'index.html');
+  console.log('Attempting to serve:', filePath);
+  res.sendFile(filePath);
 });
+
 
 //const port = 3000;
 
