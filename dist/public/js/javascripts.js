@@ -20,6 +20,7 @@ async function getUserInfo() {
   
     //fetch options from the server for the startRegistration process
     const resp = await fetch('https://mern-video.azurewebsites.net/attestation/options', {
+      //const resp = await fetch('http://localhost:3000/attestation/options', {
       method: 'POST',
       credentials: 'same-origin',
       headers: {
@@ -139,65 +140,65 @@ async function getUserInfo() {
 
   //function to logout the user
 async function logout() {
-  // const resp = await fetch('/logout');
-  // const contentType = resp.headers.get("content-type");
+  const resp = await fetch('/logout');
+  const contentType = resp.headers.get("content-type");
 
-  // if (contentType && contentType.includes("application/json")) {
-  //   const json = await resp.json();
-  //   console.log("1  ----------------------->");
-  //   if (json.status === 'ok') {
-  //     console.log("2  ----------------------->");
-  //     const loginnameElement = document.getElementById('loginname');
-  //     const successElement = document.getElementById('success');
+  if (contentType && contentType.includes("application/json")) {
+    const json = await resp.json();
+    console.log("1  ----------------------->");
+    if (json.status === 'ok') {
+      console.log("2  ----------------------->");
+      const loginnameElement = document.getElementById('loginname');
+      const successElement = document.getElementById('success');
 
-  //     if (loginnameElement) {
-  //       console.log("3 ----------------------->");
-  //       loginnameElement.innerText = '';
-  //     }
+      if (loginnameElement) {
+        console.log("3 ----------------------->");
+        loginnameElement.innerText = '';
+      }
 
-  //     if (successElement) {
-  //       console.log("4  ----------------------->");
-  //       successElement.innerText = '';
-  //     }
+      if (successElement) {
+        console.log("4  ----------------------->");
+        successElement.innerText = '';
+      }
 
-  //     //redirect to the sign-in page after successful logout
-  //     if (json.redirect) {
-  //       window.location.href = json.redirect;
-  //     } else {
-  //       console.error('Server did not provide a redirect URL');
-  //     }
-  //   }
-  // } else {
-  //   console.error('Server did not return JSON');
-  // }
-  window.location.href = '/logout';
+      //redirect to the sign-in page after successful logout
+      if (json.redirect) {
+        window.location.href = json.redirect;
+      } else {
+        console.error('Server did not provide a redirect URL');
+      }
+    }
+  } else {
+    console.error('Server did not return JSON');
+  }
+  //window.location.href = '/logout';
 }
 
-  // fetch('/result', {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json'
-  //   },
-  //   body: JSON.stringify({
-  //     // Your data here
-  //   })
-  // })
-  // .then(response => {
-  //   const contentType = response.headers.get("content-type");
-  //   if (contentType && contentType.includes("application/json")) {
-  //     return response.json();
-  //   } else {
-  //     throw new TypeError("Server response is not JSON");
-  //   }
-  // })
-  // .then(data => {
-  //   //handle the JSON response
-  //   if (data.status === 'ok' && data.redirect) {
-  //     //redirect the user to the where needed
-  //     window.location.href = data.redirect;
-  //   }
-  // })
-  // .catch(error => {
-  //   console.error('Error:', error);
-  // });
+  fetch('/result', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      // Your data here
+    })
+  })
+  .then(response => {
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      return response.json();
+    } else {
+      throw new TypeError("Server response is not JSON");
+    }
+  })
+  .then(data => {
+    //handle the JSON response
+    if (data.status === 'ok' && data.redirect) {
+      //redirect the user to the where needed
+      window.location.href = data.redirect;
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
   
