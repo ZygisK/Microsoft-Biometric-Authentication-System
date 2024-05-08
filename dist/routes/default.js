@@ -45,21 +45,20 @@ router.get('/userinfo', (req, res) => __awaiter(void 0, void 0, void 0, function
 }));
 
 router.get('/logout', (req, res) => {
-    console.log('Destroying session for', req.session.username);
     req.session.destroy((err) => {
-        if (err) {
-            console.error('Logout error:', err);
-            return res.json({
-                status: 'failed',
-                errorMessage: 'Error logging out.',
-            });
-        }
-        console.log('Session destroyed successfully');
-        res.json({
-            status: 'ok',
-            redirect: '../dist/public/signin.html',
+      if (err) {
+        return res.json({
+          status: 'failed',
+          errorMessage: 'Error logging out.',
         });
+      }
+
+      res.json({
+        status: 'ok',
+        errorMessage: '',
+        redirect: '/signin.html'
+      });
     });
-});
+  });
 
 exports.default = router;
