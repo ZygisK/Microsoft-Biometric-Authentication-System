@@ -129,7 +129,7 @@ async function getUserInfo() {
       elemSuccess.innerText = 'Successfully authenticated!';
 
       //redirect once user is authenticated
-      //window.location.href = './dashboard.html'; //sql injection vulnerability
+      window.location.href = './dashboard.html'; //sql injection vulnerability
 
       await getUserInfo();
      } else {
