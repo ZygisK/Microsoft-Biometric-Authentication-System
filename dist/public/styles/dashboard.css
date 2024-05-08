@@ -1,0 +1,147 @@
+/* Reset and Global styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+  }
+  
+  /* Main dashboard container */
+  .website {
+    background-color: #ffffff;
+    width: 90%;
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 40px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+  }
+  
+  /* Sidebar */
+  .box {
+    padding: 20px;
+    background-color: #f7faff;
+    border-radius: 8px;
+  }
+  
+  .left {
+    flex: 0 0 15%;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .tabs {
+    color: #0077cc;
+    cursor: pointer;
+    margin: 20px 0;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+  }
+  
+  .tabs:hover {
+    background-color: #e1f3ff;
+  }
+  
+  #patients, #appointments, #schedule, #prescriptions {
+    margin-top: 24px;
+    text-align: left;
+  }
+  
+  #currentDate {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+  }
+  
+  /* Middle Section */
+  .middle {
+    flex: 0 0 20%;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    background-color: #f9fafb;
+  }
+  
+  .break {
+    margin: 10px 0;
+  }
+  
+  h3 {
+    color: #555;
+    margin-bottom: 16px;
+  }
+  
+  h4 {
+    color: #444;
+    margin-bottom: 8px;
+  }
+  
+  p {
+    color: #666;
+  }
+  
+  /* Main Content Section */
+  .main {
+    flex: 1;
+    padding: 20px;
+    background-color: #ffffff;
+  }
+  
+  .main h1 {
+    color: #0077cc;
+    margin-bottom: 20px;
+  }
+  
+  .main .bold {
+    font-weight: bold;
+    display: inline;
+  }
+  
+  #search {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #d1d1d1;
+    border-radius: 6px;
+  }
+  
+  hr {
+    opacity: 0.25;
+    margin: 20px 0;
+  }
+  
+  /* Doctor Section */
+  .right {
+    flex: 0 0 15%;
+    padding: 20px;
+    text-align: center;
+    background-color: #f7faff;
+  }
+  
+  #doctor {
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+  
+  .logout-button {
+    padding: 10px 20px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .logout-button:hover {
+    background-color: #c0392b;
+  }
+  

@@ -51,12 +51,12 @@ app.use(express_1.default.static(path.join(__dirname, 'public')));
 // });
 
 app.get('/dashboard', (req, res) => {
+    console.log('Dashboard requested');
     res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
 });
 
-app.get('/signin', (req, res) => {
-    // res.sendFile(path.join(__dirname, 'public', 'index.html'));
-    res.send('404: Page not found');
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 
