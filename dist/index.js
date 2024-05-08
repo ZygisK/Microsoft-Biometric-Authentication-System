@@ -32,12 +32,21 @@ app.use((0, express_session_1.default)({
 app.use((0, cookie_parser_1.default)());
 //app.use(express.static('./src/public/'));
 //need to make a build folder
+
 app.use(express_1.default.static(path.join(__dirname, 'public')));
 
-
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    if (req.accepts('html')) {
+        res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    } else {
+        // Respond with 404 for non-HTML requests on wildcard route
+        res.status(404).send('Not Found');
+    }
 });
+
+
+
+
 //const port = 3000;
 /**
  * routes
