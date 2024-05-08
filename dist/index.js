@@ -37,19 +37,8 @@ console.log('Directory:', __dirname);
 app.use(express_1.default.static(path.join(__dirname, 'public')));
 
 app.get('*', (req, res) => {
-    if (req.accepts('html')) {
-        res.sendFile(path.join(__dirname, 'public', 'index.html'));
-    }
-    
-    else if (req.accepts('css')) {
-        res.sendFile(path.join(__dirname, 'public', 'styles', 'styles.css'));
-    }
-    else {
-        // Respond with 404 for non-HTML requests on wildcard route
-        res.status(404).send('Not Found');
-    }
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
-
 
 
 
