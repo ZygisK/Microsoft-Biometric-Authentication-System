@@ -34,6 +34,10 @@ app.use((0, cookie_parser_1.default)());
 //need to make a build folder
 
 console.log('Directory:', __dirname);
+console.log('Serving files from:', path.join(__dirname, 'public'));
+console.log('Sign-in page path:', path.join(__dirname, 'public', 'signin.html'));
+
+
 app.use(express_1.default.static(path.join(__dirname, 'public')));
 
 // Move your specific route before the catch-all route
