@@ -139,22 +139,24 @@ async function getUserInfo() {
 
   //function to logout the user
   async function logout() {
-    const resp = await fetch('/logout');
-    const json = await resp.json();
-    if (json.status === 'ok') {
-      let successElement = document.getElementById('success');
-      let loginnameElement = document.getElementById('loginname');
-      if (successElement) {
-        successElement.innerText = '';
+    try {
+      const response = await fetch('/logout');
+      if (!response.ok) throw new Error('Network response was not ok.');
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new TypeError("Oops, we haven't got JSON!");
       }
-      if (loginnameElement) {
-        loginnameElement.innerText = '';
-      }
-      if (json.redirect) {
+      const json = await response.json();
+      if (json.status === 'ok') {
         window.location.href = json.redirect;
+      } else {
+        console.error('Logout failed:', json.errorMessage);
       }
+    } catch (error) {
+      console.error('Error during logout:', error);
     }
   }
+  
 
   // fetch('/result', {
   //   method: 'POST',

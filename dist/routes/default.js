@@ -61,4 +61,10 @@ router.get('/logout', (req, res) => {
     });
   });
 
+  //check if /signin.html can be accessed
+    router.get('/signin.html', (req, res) => {
+        console.log('Sign-in page requested');
+        res.sendFile(path.join(__dirname, 'public', 'signin.html'));
+    });
+
 exports.default = router;
