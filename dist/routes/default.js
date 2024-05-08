@@ -16,46 +16,46 @@ const express_1 = __importDefault(require("express"));
 const userSchema_1 = require("../models/userSchema");
 const router = express_1.default.Router();
 router.get('/userinfo', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!req.session.isLoggedIn || !req.session.username) {
-        return res.json({
-            status: 'failed',
-            errorMessage: 'Not logged in.',
-        });
-    }
-    try {
-        const user = yield userSchema_1.User.findOne({ username: req.session.username });
-        if (!user) {
-            return res.json({
-                status: 'failed',
-                errorMessage: 'User not found.',
-            });
-        }
-        res.json({
-            status: 'ok',
-            errorMessage: '',
-            username: user.username
-        });
-    }
-    catch (error) {
-        res.status(500).json({
-            status: 'failed',
-            errorMessage: 'Error retrieving user information.'
-        });
-    }
+    // if (!req.session.isLoggedIn || !req.session.username) {
+    //     return res.json({
+    //         status: 'failed',
+    //         errorMessage: 'Not logged in.',
+    //     });
+    // }
+    // try {
+    //     const user = yield userSchema_1.User.findOne({ username: req.session.username });
+    //     if (!user) {
+    //         return res.json({
+    //             status: 'failed',
+    //             errorMessage: 'User not found.',
+    //         });
+    //     }
+    //     res.json({
+    //         status: 'ok',
+    //         errorMessage: '',
+    //         username: user.username
+    //     });
+    // }
+    // catch (error) {
+    //     res.status(500).json({
+    //         status: 'failed',
+    //         errorMessage: 'Error retrieving user information.'
+    //     });
+    // }
 }));
 router.get('/logout', (req, res) => {
     req.session.destroy((err) => {
-        if (err) {
-            return res.json({
-                status: 'failed',
-                errorMessage: 'Error logging out.',
-                //errorMessage: err.message,
-            });
-        }
+      if (err) {
+        return res.json({
+          status: 'failed',
+          errorMessage: 'Error logging out.',
+        });
+      }
+  
+     // res.redirect(302,'http://localhost:3000/signin.html');
+      res.redirect(302,'https://mern-video.azurewebsites.net/signin.html');
+      
+
     });
-    res.json({
-        status: 'ok',
-        errorMessage: ''
-    });
-});
+  });
 exports.default = router;

@@ -19,7 +19,8 @@ async function getUserInfo() {
     elemError.innerHTML = '';
   
     //fetch options from the server for the startRegistration process
-    const resp = await fetch('http://localhost:3000/attestation/options', {
+   // const resp = await fetch('http://localhost:3000/attestation/options', {
+      const resp = await fetch('https://mern-video.azurewebsites.net/attestation/options', {
       method: 'POST',
       credentials: 'same-origin',
       headers: {
@@ -129,36 +130,53 @@ async function getUserInfo() {
       elemSuccess.innerText = 'Successfully authenticated!';
 
       //redirect once user is authenticated
-      //window.location.href = './dashboard.html'; //sql injection vulnerability
+      window.location.href = './dashboard.html'; //sql injection vulnerability
 
-      await getUserInfo();
+      //await getUserInfo();
      } else {
       elemError.innerText = 'Error: ' + verificationJSON.errorMessage + ' user is not registered';
      }
   }
 
-  //function to logout the user
   async function logout() {
-    const resp = await fetch('/logout');
-    const json = await resp.json();
-    if (json.status === 'ok') {
-      document.getElementById('success').innerText = '';
-      document.getElementById('loginname').innerText = '';
-    }
+    // const resp = await fetch('/logout');
+    // let json;
+    // try {
+    //   json = await resp.json();
+    // } catch (error) {
+    //   console.error('Invalid JSON:', error);
+    //   return;
+    // }
+  
+    // if (json.status === 'ok') {
+    //   let successElement = document.getElementById('success');
+    //   let loginnameElement = document.getElementById('loginname');
+    //   if (successElement) {
+    //     successElement.innerText = '';
+    //   }
+    //   if (loginnameElement) {
+    //     loginnameElement.innerText = '';
+    //   }
+    //   if (json.redirect) {
+    //     window.location.href = json.redirect;
+    //   }
+    // }
+
+    window.location.href = '/logout';
   }
 
-  fetch('/result', {
-    method: 'POST',
-  })
-  .then(response => response.json())
-  .then(data => {
-    //handle the JSON response
-    if (data.status === 'ok' && data.redirect) {
-      //redirect the user to the where needed
-      window.location.href = data.redirect;
-    }
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
+  // fetch('/logout', {
+  //   method: 'POST',
+  // })
+  // .then(response => response.json())
+  // .then(data => {
+  //   //handle the JSON response
+  //   if (data.status === 'ok' && data.redirect) {
+  //     //redirect the user to the where needed
+  //     window.location.href = data.redirect;
+  //   }
+  // })
+  // .catch(error => {
+  //   console.error('Error:', error);
+  // });
   

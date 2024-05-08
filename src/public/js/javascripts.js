@@ -129,7 +129,7 @@ async function getUserInfo() {
       elemSuccess.innerText = 'Successfully authenticated!';
 
       //redirect once user is authenticated
-      //window.location.href = './dashboard.html'; //sql injection vulnerability
+      window.location.href = './dashboard.html'; //sql injection vulnerability
 
       await getUserInfo();
      } else {
@@ -147,18 +147,18 @@ async function getUserInfo() {
     }
   }
 
-  fetch('/result', {
-    method: 'POST',
-  })
-  .then(response => response.json())
-  .then(data => {
-    //handle the JSON response
-    if (data.status === 'ok' && data.redirect) {
-      //redirect the user to the where needed
-      window.location.href = data.redirect;
-    }
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
+  // fetch('/logout', {
+  //   method: 'POST',
+  // })
+  // .then(response => response.json())
+  // .then(data => {
+  //   //handle the JSON response
+  //   if (data.status === 'ok' && data.redirect) {
+  //     //redirect the user to the where needed
+  //     window.location.href = data.redirect;
+  //   }
+  // })
+  // .catch(error => {
+  //   console.error('Error:', error);
+  // });
   
