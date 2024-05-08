@@ -12,7 +12,7 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const express_session_1 = __importDefault(require("express-session"));
 const crypto_1 = __importDefault(require("crypto"));
 const mongoose_1 = __importDefault(require("mongoose"));
-// const cors = require('cors');
+const cors = require('cors');
 //import users from './routes/users';
 require('dotenv').config();
 const path = require('path');
@@ -23,7 +23,7 @@ const app = (0, express_1.default)();
 //     err => {console.log('Error connecting to MongoDB')}
 // );
 
-// app.use(cors());
+app.use(cors());
 
 mongoose_1.default.connect(process.env.MONGO_DB_URI || 'mongodb+srv://deafhole:microsoft@cluster0.7ssubtn.mongodb.net/zygi?retryWrites=true&w=majority&appName=Cluster0').then(() => console.log('Connected to MongoDB'), err => console.log('Error connecting to MongoDB', err));
 app.use(body_parser_1.default.urlencoded({ extended: false }));
