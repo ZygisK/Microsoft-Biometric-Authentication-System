@@ -45,21 +45,17 @@ router.get('/userinfo', (req, res) => __awaiter(void 0, void 0, void 0, function
 }));
 
 router.get('/logout', (req, res) => {
+    console.log('Logout route hit');  // Log to see if this route is reached
     req.session.destroy((err) => {
-      if (err) {
-        return res.json({
-          status: 'failed',
-          errorMessage: 'Error logging out.',
-        });
-      }
-
-      res.json({
-        status: 'ok',
-        errorMessage: '',
-        redirect: '/signin.html'
-      });
+        if (err) {
+            console.error('Logout error:', err);
+            return res.json({ status: 'failed', errorMessage: 'Error logging out.' });
+        }
+        res.json({ status: 'ok', redirect: '/signin.html' });
     });
-  });
+});
+
+
 
   //check if /signin.html can be accessed
     router.get('/signin.html', (req, res) => {

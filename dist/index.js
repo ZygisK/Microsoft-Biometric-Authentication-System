@@ -17,14 +17,10 @@ const cors = require('cors');
 require('dotenv').config();
 const path = require('path');
 const app = (0, express_1.default)();
-//connect to MongoDB
-// mongoose.connect('mongodb+srv://deafhole:microsoft@cluster0.7ssubtn.mongodb.net/zygi?retryWrites=true&w=majority&appName=Cluster0').then(
-//     () => {console.log('Connected to MongoDB')},
-//     err => {console.log('Error connecting to MongoDB')}
-// );
 
 app.use(cors());
 
+//connect to MongoDB
 mongoose_1.default.connect(process.env.MONGO_DB_URI || 'mongodb+srv://deafhole:microsoft@cluster0.7ssubtn.mongodb.net/zygi?retryWrites=true&w=majority&appName=Cluster0').then(() => console.log('Connected to MongoDB'), err => console.log('Error connecting to MongoDB', err));
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use(body_parser_1.default.json());
@@ -46,14 +42,6 @@ console.log('Sign-in page path:', path.join(__dirname, 'public', 'signin.html'))
 app.use(express_1.default.static(path.join(__dirname, 'public')));
 
 
-// app.get('/test.css', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'public', 'test.css'));
-// });
-
-// app.get('/signin', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'public', 'signin.html'));
-// });
-
 app.get('/dashboard', (req, res) => {
     console.log('Dashboard requested');
     res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
@@ -62,7 +50,6 @@ app.get('/dashboard', (req, res) => {
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
-
 
 
 
