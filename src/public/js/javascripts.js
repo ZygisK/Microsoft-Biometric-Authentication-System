@@ -142,23 +142,17 @@ async function getUserInfo() {
     const resp = await fetch('/logout');
     const json = await resp.json();
     if (json.status === 'ok') {
-      document.getElementById('success').innerText = '';
-      document.getElementById('loginname').innerText = '';
+      let successElement = document.getElementById('success');
+      let loginnameElement = document.getElementById('loginname');
+      if (successElement) {
+        successElement.innerText = '';
+      }
+      if (loginnameElement) {
+        loginnameElement.innerText = '';
+      }
+      if (json.redirect) {
+        window.location.href = json.redirect;
+      }
     }
   }
-
-  fetch('/result', {
-    method: 'POST',
-  })
-  .then(response => response.json())
-  .then(data => {
-    //handle the JSON response
-    if (data.status === 'ok' && data.redirect) {
-      //redirect the user to the where needed
-      window.location.href = data.redirect;
-    }
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
   
