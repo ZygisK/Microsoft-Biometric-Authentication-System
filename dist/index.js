@@ -30,6 +30,7 @@ app.use((0, express_session_1.default)({
     saveUninitialized: true
 }));
 app.use((0, cookie_parser_1.default)());
+
 //app.use(express.static('./src/public/'));
 //need to make a build folder
 
@@ -37,13 +38,14 @@ console.log('Directory:', __dirname);
 console.log('Serving files from:', path.join(__dirname, 'public'));
 console.log('Sign-in page path:', path.join(__dirname, 'public', 'signin.html'));
 
-
+//this is the line that serves the files
 app.use(express_1.default.static(path.join(__dirname, 'public')));
 
-// Move your specific route before the catch-all route
+
 // app.get('/test.css', (req, res) => {
 //     res.sendFile(path.join(__dirname, 'public', 'test.css'));
 // });
+
 app.get('/signin', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'signin.html'));
 });
@@ -53,7 +55,8 @@ app.get('/dashboard', (req, res) => {
 });
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    // res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.send('404: Page not found');
 });
 
 
