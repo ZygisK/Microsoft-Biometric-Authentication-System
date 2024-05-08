@@ -38,7 +38,7 @@ app.use(express_1.default.static(path.join(__dirname, 'public')));
 
 // Move your specific route before the catch-all route
 app.get('/test.css', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'styles', 'test.css'));
+    res.sendFile(path.join(__dirname, 'public', 'test.css'));
 });
 
 app.get('*', (req, res) => {
