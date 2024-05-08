@@ -56,7 +56,7 @@ router.get('/logout', (req, res) => {
       // Redirect to the login page after successful logout
       res.json({
         status: 'ok',
-        redirect: '/signin.html'
+        redirect: '../dist/public/signin.html',
       });
     });
   });
