@@ -139,15 +139,7 @@ async function getUserInfo() {
 
   //function to logout the user
   async function logout() {
-    try {
-        const response = await fetch('/logout');
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok.');
-        }
-    } catch (error) {
-        console.error('Error during logout:', error);
-    }
+    window.location.href = '/logout';
 }
 
   
