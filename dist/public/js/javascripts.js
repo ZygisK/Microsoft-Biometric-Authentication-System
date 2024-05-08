@@ -138,19 +138,57 @@ async function getUserInfo() {
   }
 
   //function to logout the user
-  async function logout() {
-    const resp = await fetch('/logout');
+async function logout() {
+  const resp = await fetch('/logout');
+  const contentType = resp.headers.get("content-type");
+
+  if (contentType && contentType.includes("application/json")) {
     const json = await resp.json();
+    console.log("1  ----------------------->");
     if (json.status === 'ok') {
-      document.getElementById('success').innerText = '';
-      document.getElementById('loginname').innerText = '';
+      console.log("2  ----------------------->");
+      const loginnameElement = document.getElementById('loginname');
+      const successElement = document.getElementById('success');
+
+      if (loginnameElement) {
+        console.log("3 ----------------------->");
+        loginnameElement.innerText = '';
+      }
+
+      if (successElement) {
+        console.log("4  ----------------------->");
+        successElement.innerText = '';
+      }
+
+      //redirect to the sign-in page after successful logout
+      if (json.redirect) {
+        window.location.href = json.redirect;
+      } else {
+        console.error('Server did not provide a redirect URL');
+      }
     }
+  } else {
+    console.error('Server did not return JSON');
   }
+}
 
   fetch('/result', {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      // Your data here
+    })
   })
-  .then(response => response.json())
+  .then(response => {
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      return response.json();
+    } else {
+      throw new TypeError("Server response is not JSON");
+    }
+  })
   .then(data => {
     //handle the JSON response
     if (data.status === 'ok' && data.redirect) {
