@@ -46,9 +46,9 @@ app.use(express_1.default.static(path.join(__dirname, 'public')));
 //     res.sendFile(path.join(__dirname, 'public', 'test.css'));
 // });
 
-app.get('/signin', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'signin.html'));
-});
+// app.get('/signin', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'public', 'signin.html'));
+// });
 
 app.get('/dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
