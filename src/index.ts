@@ -42,7 +42,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(expressSession({
   secret: crypto.randomBytes(32).toString('hex'),
-  resave: true,
+  resave: false,
   saveUninitialized: true
 }));
 app.use(cookieParser());
