@@ -44,21 +44,22 @@ router.get('/userinfo', (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 }));
 
-router.post('/logout', (req, res) => {
-    req.session.destroy((err) => {
-      if (err) {
-        return res.json({
-          status: 'failed',
-          errorMessage: 'Error logging out.',
-        });
-      }
+router.get('/logout', (req, res) => {
+    res.redirect(302, 'https://mern-video.azurewebsites.net/signin.html');
+    // req.session.destroy((err) => {
+    //   if (err) {
+    //     return res.json({
+    //       status: 'failed',
+    //       errorMessage: 'Error logging out.',
+    //     });
+    //   }
   
-      // Redirect to the login page after successful logout
-      res.json({
-        status: 'ok',
-        redirect: '/signin.html'
-      });
-    });
+    //   // Redirect to the login page after successful logout
+    //   res.json({
+    //     status: 'ok',
+    //     redirect: '/signin.html'
+    //   });
+    // });
   });
 
 exports.default = router;

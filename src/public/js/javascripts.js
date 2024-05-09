@@ -145,10 +145,6 @@ async function getUserInfo() {
       document.getElementById('success').innerText = '';
       document.getElementById('loginname').innerText = '';
     }
-	else
-	{
-		alert("Failed to logout: " + json.statusText);
-	}	
   }
 
   fetch('/result', {
