@@ -44,7 +44,7 @@ router.get('/userinfo', (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 }));
 
-router.get('/logout', (req, res) => {
+router.post('/logout', (req, res) => {
     req.session.destroy((err) => {
       if (err) {
         return res.json({

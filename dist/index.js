@@ -30,7 +30,7 @@ app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use(body_parser_1.default.json());
 app.use((0, express_session_1.default)({
     secret: crypto_1.default.randomBytes(32).toString('hex'),
-    resave: true,
+    resave: false,
     saveUninitialized: true
 }));
 app.use((0, cookie_parser_1.default)());

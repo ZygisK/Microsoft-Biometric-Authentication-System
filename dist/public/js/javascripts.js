@@ -139,7 +139,9 @@ async function getUserInfo() {
 
   //function to logout the user
   async function logout() {
-    const resp = await fetch('/logout');
+    const resp = await fetch('/logout', {
+    method: 'POST',
+  });
     const json = await resp.json();
     if (json.status === 'ok') {
       document.getElementById('success').innerText = '';
