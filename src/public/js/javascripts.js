@@ -48,7 +48,7 @@ async function getUserInfo() {
       console.log('attResp (before sending to server):', attResp);
     } catch (error) {
       console.error('Error in startRegistration:', error);
-      elemError.innerText = 'Error during registration: ' + error;
+      elemError.innerText = 'Failed to register. Please try again';
       return;
     }
   
