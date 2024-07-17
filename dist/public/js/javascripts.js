@@ -19,7 +19,7 @@ async function getUserInfo() {
     elemError.innerHTML = '';
   
     //fetch options from the server for the startRegistration process
-    const resp = await fetch('https://mern-video.azurewebsites.net/attestation/options', {
+    const resp = await fetch('http://localhost:5003/attestation/options', { //https://mern-video.azurewebsites.net/attestation/options
       //const resp = await fetch('http://localhost:3000/attestation/options', {
       method: 'POST',
       credentials: 'same-origin',
